@@ -84,8 +84,22 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
+
             ViewData["DayId"] = new SelectList(_context.Days, "DayId", "Name", schedule.DayId);
-            ViewData["TimeSegmentId"] = new SelectList(_context.TimeSegments, "TimeSegmentId", "TimeSegmentId", schedule.TimeSegmentId);
+            //ViewData["TimeSegmentId"] = new SelectList(
+            //    _context.TimeSegments
+            //    .Select(t=>new 
+            //    { 
+            //TimeSegmentId = id,
+            //    CompoundSegment = $"{t.TimeStart} - {t.TimeEnd}"
+            //    }), "TimeSegmentId", "TimeSegmentId", schedule.TimeSegmentId);
+            ViewData["TimeSegmentId"] = new SelectList(
+                _context.TimeSegments
+                .Select(t => new
+                {
+                    TimeSegmentId = id,
+                    CompoundSegment = $"{t.TimeStart} - {t.TimeEnd}"
+                }), "TimeSegmentId", "CompoundSegment", schedule.TimeSegmentId);
             return View(schedule);
         }
 

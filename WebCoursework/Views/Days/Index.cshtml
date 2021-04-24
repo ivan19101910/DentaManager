@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebCoursework.TimeSegment>
+﻿@model IEnumerable<WebCoursework.Day>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,10 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TimeStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TimeEnd)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.CreatedDateTime)
@@ -31,10 +28,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.TimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeEnd)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             @*<td>
                 @Html.DisplayFor(modelItem => item.CreatedDateTime)
@@ -43,9 +37,9 @@
                 @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
             </td>*@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.TimeSegmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TimeSegmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TimeSegmentId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.DayId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DayId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DayId">Delete</a>
             </td>
         </tr>
 }

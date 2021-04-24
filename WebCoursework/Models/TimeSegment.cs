@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -18,6 +19,7 @@ namespace WebCoursework
         [DisplayName("Час початку")]
         public TimeSpan TimeStart { get; set; }
         [DisplayName("Час кінця")]
+        [DataType(DataType.Time)]
         public TimeSpan TimeEnd { get; set; }
 
         [HiddenInput]
