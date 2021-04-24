@@ -12,12 +12,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.CreatedDateTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastModifiedDateTime)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Schedule)
             </th>
@@ -30,12 +30,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.CreatedDateTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Schedule.ScheduleId)
             </td>

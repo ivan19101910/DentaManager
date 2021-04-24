@@ -1,4 +1,4 @@
-﻿@model WebCoursework.WorkerSchedule
+﻿@model WebCoursework.TimeSegment
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,28 +6,30 @@
 
 <h1>Edit</h1>
 
-<h4>WorkerSchedule</h4>
+<h4>TimeSegment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="TimeSegmentId" />
             <div class="form-group">
-                <label asp-for="WorkerId" class="control-label"></label>
-                <select asp-for="WorkerId" class="form-control" asp-items="ViewBag.WorkerId"></select>
-                <span asp-validation-for="WorkerId" class="text-danger"></span>
+                <label asp-for="TimeStart" class="control-label"></label>
+                <input asp-for="TimeStart" class="form-control" />
+                <span asp-validation-for="TimeStart" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ScheduleId" class="control-label"></label>
-                <select asp-for="ScheduleId" class="form-control" asp-items="ViewBag.ScheduleId"></select>
-                <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                <label asp-for="TimeEnd" class="control-label"></label>
+                <input asp-for="TimeEnd" class="form-control" />
+                <span asp-validation-for="TimeEnd" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CreatedDateTime" class="control-label"></label>
                 <input asp-for="CreatedDateTime" class="form-control" />
                 <span asp-validation-for="CreatedDateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="LastModifiedDateTime" class="control-label"></label>
                 <input asp-for="LastModifiedDateTime" class="form-control" />
                 <span asp-validation-for="LastModifiedDateTime" class="text-danger"></span>
             </div>

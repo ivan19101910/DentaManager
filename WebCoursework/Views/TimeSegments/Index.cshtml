@@ -1,0 +1,53 @@
+﻿@model IEnumerable<WebCoursework.TimeSegment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeEnd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModifiedDateTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TimeSegmentId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TimeSegmentId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TimeSegmentId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
