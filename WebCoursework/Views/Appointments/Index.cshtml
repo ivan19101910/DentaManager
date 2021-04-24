@@ -15,33 +15,41 @@
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentDate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RealEndTime)
-            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDateTime)
+                @Html.DisplayNameFor(model => model.RealEndTime)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Worker.FirstName) лікаря
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastModifiedDateTime)
+                @Html.DisplayNameFor(model => model.Worker.LastName) лікаря
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastModifiedDateTime)
+        </th>*@
+            @*<th>
+            @Html.DisplayNameFor(model => model.TotalSum)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Patient.FirstName) пацієнта
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalSum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Patient)
+                @Html.DisplayNameFor(model => model.Patient.LastName) пацієнта
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Worker)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -51,33 +59,40 @@
             <td>
                 @Html.DisplayFor(modelItem => item.AppointmentDate)
             </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.Notes)
+                @Html.DisplayFor(modelItem => item.AppointmentTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RealEndTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppointmentTime)
+                @Html.DisplayFor(modelItem => item.Worker.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedDateTime)
+                @Html.DisplayFor(modelItem => item.Worker.LastName)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.CreatedDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalSum)
+        </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalSum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.Address)
+                @Html.DisplayFor(modelItem => item.Patient.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Worker.Address)
-            </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AppointmentId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.AppointmentId">Details</a> |

@@ -87,9 +87,26 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-            ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Address", appointment.PatientId);
+
+            ViewData["PatientId"] = new SelectList(
+                _context.Patients
+                .Select(p=>new
+                {
+                    p.PatientId,
+                    CompoundName = $"{p.FirstName} {p.LastName}"
+                }), "PatientId", "CompoundName", appointment.PatientId);
+
             ViewData["StatusId"] = new SelectList(_context.AppointmentStatuses, "StatusId", "Name", appointment.StatusId);
-            ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", appointment.WorkerId);
+            ViewData["WorkerId"] = new SelectList(
+                _context.Workers
+                .Include(o=>o.Office)
+                .ThenInclude(c=>c.City)
+                .Select(w => new
+                {
+                    w.WorkerId,
+                    CompoundWorker = $"{w.FirstName} {w.LastName} | {w.Office.City.Name}"
+                })
+                , "WorkerId", "CompoundWorker", appointment.WorkerId);
             return View(appointment);
         }
 
