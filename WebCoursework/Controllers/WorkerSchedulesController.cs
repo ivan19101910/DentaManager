@@ -21,7 +21,13 @@ namespace WebCoursework.Controllers
         // GET: WorkerSchedules
         public async Task<IActionResult> Index()
         {
-            var dentalClinicDBContext = _context.WorkerSchedules.Include(w => w.Schedule).Include(w => w.Worker);
+            var dentalClinicDBContext = _context.WorkerSchedules
+                .Include(w => w.Schedule)
+                    .ThenInclude(t=>t.TimeSegment)
+                .Include(w => w.Schedule)
+                    .ThenInclude(d=>d.Day)
+                .Include(w => w.Worker)
+                    .ThenInclude(p=>p.Position);
             return View(await dentalClinicDBContext.ToListAsync());
         }
 
@@ -84,7 +90,20 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "ScheduleId", "ScheduleId", workerSchedule.ScheduleId);
+            var selectList = _context.Schedules
+               .Include(d => d.Day)
+               .Include(t => t.TimeSegment)
+               .OrderBy(d=>d.Day.Name)
+               .Select(s => new
+               {
+                   ScheduleId = id,
+                   CompoundSchedule = $"{s.Day.Name} | {s.TimeSegment.TimeStart} - {s.TimeSegment.TimeEnd}"
+
+               });
+
+
+            //ViewData["ScheduleId"] = new SelectList(_context.Schedules, "ScheduleId", "ScheduleId", workerSchedule.ScheduleId);
+            ViewData["ScheduleId"] = new SelectList(selectList, "ScheduleId", "CompoundSchedule", workerSchedule.ScheduleId);
             ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", workerSchedule.WorkerId);
             return View(workerSchedule);
         }

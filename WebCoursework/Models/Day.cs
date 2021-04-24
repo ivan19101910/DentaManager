@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 #nullable disable
 
@@ -13,6 +14,7 @@ namespace WebCoursework
         }
 
         public int DayId { get; set; }
+        [DisplayName("День")]
         public string Name { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
