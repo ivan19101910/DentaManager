@@ -4,68 +4,76 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Виплати зарплат</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Створити нову виплату</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
+<form asp-controller="SalaryPayments" asp-action="Index">
+    <p>
+        Рік: <input type="text" name="year" />
+
+        Місяць: <input type="text" name="month" />
+
+        Працівник: <input type="text" name="workerName" />
+
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewBag.MonthSort">
+                        @Html.DisplayNameFor(model => model.MonthNumber)
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewBag.YearSort">
+                        @Html.DisplayNameFor(model => model.Year)
+                    </a>
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.TransactionNumber)
+                    </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.MonthNumber)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.WorkerSort">
+                    @Html.DisplayNameFor(model => model.Worker)
+                </a>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TransactionNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastModifiedDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Worker)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MonthNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Worker.Address)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SalaryPaymentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SalaryPaymentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SalaryPaymentId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonthNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.TransactionNumber)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Worker.FirstName) @Html.DisplayFor(modelItem => item.Worker.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.SalaryPaymentId">Edit</a> |
+                        @*<a asp-action="Details" asp-route-id="@item.SalaryPaymentId">Details</a> |*@
+                        <a asp-action="Delete" asp-route-id="@item.SalaryPaymentId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

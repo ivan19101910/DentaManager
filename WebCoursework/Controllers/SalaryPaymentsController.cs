@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,10 +21,46 @@ namespace WebCoursework.Controllers
         }
 
         // GET: SalaryPayments
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var dentalClinicDBContext = _context.SalaryPayments.Include(s => s.Worker);
+        //    return View(await dentalClinicDBContext.ToListAsync());
+
+        //}
+        public async Task<IActionResult> Index(int year, int month, string workerName ,SalaryPaymentSortState sortOrder = SalaryPaymentSortState.YearAsc)
         {
-            var dentalClinicDBContext = _context.SalaryPayments.Include(s => s.Worker);
-            return View(await dentalClinicDBContext.ToListAsync());
+            var payments = _context.SalaryPayments.Include(w=>w.Worker).Select(x => x);
+            //var workers = from m in _context.Workers
+            //             select m;
+
+            if (year != 0)
+            {
+                payments = payments.Where(w => w.Year == year);
+            }
+            if (month != 0)
+            {
+                payments = payments.Where(w => w.MonthNumber == month);
+            }
+            if (!String.IsNullOrEmpty(workerName))
+            {
+                payments = payments.Where(w => w.Worker.FirstName == workerName);
+            }
+
+            ViewData["YearSort"] = sortOrder == SalaryPaymentSortState.YearAsc ? SalaryPaymentSortState.YearDesc : SalaryPaymentSortState.YearAsc;
+            ViewData["MonthSort"] = sortOrder == SalaryPaymentSortState.MonthAsc ? SalaryPaymentSortState.MonthDesc : SalaryPaymentSortState.MonthAsc;
+            ViewData["WorkerSort"] = sortOrder == SalaryPaymentSortState.WorkerAsc ? SalaryPaymentSortState.WorkerDesc : SalaryPaymentSortState.WorkerAsc;
+
+            payments = sortOrder switch
+            {
+                SalaryPaymentSortState.YearDesc => payments.OrderByDescending(s => s.Year),
+                SalaryPaymentSortState.MonthAsc => payments.OrderBy(s => s.MonthNumber),
+                SalaryPaymentSortState.MonthDesc => payments.OrderByDescending(s => s.MonthNumber),
+                SalaryPaymentSortState.WorkerAsc => payments.OrderBy(s => s.Worker.FirstName),
+                SalaryPaymentSortState.WorkerDesc => payments.OrderByDescending(s => s.Worker.FirstName),
+                _ => payments.OrderBy(s => s.Year),
+            };
+
+            return View(await payments.ToListAsync());
         }
 
         // GET: SalaryPayments/Details/5
@@ -36,6 +74,18 @@ namespace WebCoursework.Controllers
             var salaryPayment = await _context.SalaryPayments
                 .Include(s => s.Worker)
                 .FirstOrDefaultAsync(m => m.SalaryPaymentId == id);
+
+            //string sqlQuery = "SELECT [CountPayment] ({0}, {1}, {2})"
+            string sqlQuery = $"SELECT dbo.CountPayment (15, 2020, 10)";
+            Object[] parameters = { 15, 2020, 10 };
+            //int activityCount = _context.Database.SqlQuery<int>(sqlQuery, parameters).FirstOrDefault();
+            //decimal s = _context.Database.ExecuteSqlRaw(sqlQuery, parameters);
+            //var s = _context.Database.ExecuteSqlRaw(sqlQuery);
+            
+            //decimal fff = _context.Database
+            //decimal s = _context.Workers.FromSqlRaw(sqlQuery, parameters);
+
+
             if (salaryPayment == null)
             {
                 return NotFound();
@@ -64,7 +114,16 @@ namespace WebCoursework.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", salaryPayment.WorkerId);
+            var selectList = _context.Workers
+               .Select(w => new
+               {
+                   w.WorkerId,
+                   CompoundWorker = $"{w.FirstName} {w.LastName}"
+               });
+
+            //ViewData["OfficeId"] = new SelectList(selectList, "OfficeId", "CompoundAddress", worker.OfficeId);
+            ViewData["WorkerId"] = new SelectList(selectList, "WorkerId", "CompoundWorker", salaryPayment.WorkerId);
+            //ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", salaryPayment.WorkerId);
             return View(salaryPayment);
         }
 
@@ -81,7 +140,17 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-            ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", salaryPayment.WorkerId);
+            var selectList = _context.Workers
+               .Select(w => new
+               {
+                   w.WorkerId,
+                   CompoundWorker = $"{w.FirstName} {w.LastName}"
+               });
+
+            //ViewData["OfficeId"] = new SelectList(selectList, "OfficeId", "CompoundAddress", worker.OfficeId);
+            ViewData["WorkerId"] = new SelectList(selectList, "WorkerId", "CompoundWorker", salaryPayment.WorkerId);
+
+            //ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", salaryPayment.WorkerId);
             return View(salaryPayment);
         }
 

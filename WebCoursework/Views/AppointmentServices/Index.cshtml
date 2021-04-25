@@ -13,19 +13,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                @Html.DisplayNameFor(model => model.Appointment.AppointmentId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDateTime)
+                @Html.DisplayNameFor(model => model.Appointment.AppointmentDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastModifiedDateTime)
+                @Html.DisplayNameFor(model => model.Appointment.AppointmentTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Appointment)
+                @Html.DisplayNameFor(model => model.Appointment.Worker)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Service)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
             </th>
             <th></th>
         </tr>
@@ -34,19 +37,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Appointment.AppointmentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Appointment.AppointmentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Appointment.AppointmentTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Appointment.Worker.FirstName) @Html.DisplayFor(modelItem => item.Appointment.Worker.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Appointment.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Service.Description)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

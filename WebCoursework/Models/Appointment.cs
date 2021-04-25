@@ -15,7 +15,7 @@ namespace WebCoursework
             AppointmentPayments = new HashSet<AppointmentPayment>();
             AppointmentServices = new HashSet<AppointmentService>();
         }
-
+        [DisplayName("Номер прийому")]
         public int AppointmentId { get; set; }
         [DisplayName("Дата прийому")]
         [DataType(DataType.Date)]

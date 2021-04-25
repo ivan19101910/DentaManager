@@ -36,11 +36,11 @@ namespace WebCoursework.Controllers
                 Worker user = await _context.Workers.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
                 if (user != null)
                 {
-                    await Authenticate(model.Email); 
-
+                    //await Authenticate(model.Email); 
+                    await Authenticate($"{user.FirstName} {user.LastName}");
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Некоректні логін та(або) пароль");
             }
             return View(model);
         }
@@ -176,11 +176,12 @@ namespace WebCoursework.Controllers
                .Include(c => c.City)
                .Select(c => new
                {
-                   //CityId = c.CityId,
                    OfficeId = c.OfficeId,
                    CompoundAddress = $"{c.City.Name} | {c.Address}"
                    
                });
+            
+            ViewData["OfficeId"] = new SelectList(selectList, "OfficeId", "CompoundAddress", worker.OfficeId);
             //var selectList = _context.Workers.
             //    Include(o => o.Office)
             //   .ThenInclude(c => c.City);
@@ -193,7 +194,7 @@ namespace WebCoursework.Controllers
             //ViewData["OfficeId"] = new SelectList(_context.Offices.Include(c=>c.City), "OfficeId", "City.Name", worker.OfficeId);
             //-----
             //---WORKS CORRECTLY
-            ViewData["OfficeId"] = new SelectList(selectList, "OfficeId", "CompoundAddress", worker.OfficeId);
+
             //-----
             //ViewData["CityId"] = new SelectList(_context.Offices, "OfficeId", "Address", worker.OfficeId);
             //ViewData["PositionId"] = new SelectList(selectList, "PositionId", "PositionName", worker.OfficeId);

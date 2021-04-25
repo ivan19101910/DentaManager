@@ -4,29 +4,30 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Посади</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Створити</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PositionName)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentPercentage)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BaseRate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PositionName)
-            </th>
+
             @*<th>
-                @Html.DisplayNameFor(model => model.CreatedDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastModifiedDateTime)
-            </th>*@
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastModifiedDateTime)
+        </th>*@
             <th></th>
         </tr>
     </thead>
@@ -34,23 +35,24 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.PositionName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.AppointmentPercentage)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BaseRate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PositionName)
-            </td>
+
             @*<td>
-                @Html.DisplayFor(modelItem => item.CreatedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.CreatedDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
+        </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PositionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PositionId">Details</a> |
+                @*<a asp-action="Details" asp-route-id="@item.PositionId">Details</a> |*@
                 <a asp-action="Delete" asp-route-id="@item.PositionId">Delete</a>
             </td>
         </tr>

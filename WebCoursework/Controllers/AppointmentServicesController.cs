@@ -21,7 +21,11 @@ namespace WebCoursework.Controllers
         // GET: AppointmentServices
         public async Task<IActionResult> Index()
         {
-            var dentalClinicDBContext = _context.AppointmentServices.Include(a => a.Appointment).Include(a => a.Service);
+            var dentalClinicDBContext = 
+                _context.AppointmentServices
+                .Include(a => a.Appointment)
+                .ThenInclude(w=>w.Worker)
+                .Include(a => a.Service);
             return View(await dentalClinicDBContext.ToListAsync());
         }
 
