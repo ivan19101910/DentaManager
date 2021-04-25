@@ -108,9 +108,9 @@
                 @Html.DisplayFor(modelItem => item.Position.PositionName)
             </td>
             <td>
-                <a asp-action="Редагувати" asp-route-id="@item.WorkerId">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.WorkerId">Редагувати</a> |
                 @*<a asp-action="Details" asp-route-id="@item.WorkerId">Details</a> |*@
-                <a asp-action="Видалити" asp-route-id="@item.WorkerId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.WorkerId">Видалити</a>
             </td>
         </tr>
         }

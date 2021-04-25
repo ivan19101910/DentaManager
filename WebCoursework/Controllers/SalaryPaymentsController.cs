@@ -97,7 +97,14 @@ namespace WebCoursework.Controllers
         // GET: SalaryPayments/Create
         public IActionResult Create()
         {
-            ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address");
+            var selectList = _context.SalaryPayments
+               .Select(w => new
+               {
+                   w.WorkerId,
+                   CompoundWorker = $"{w.Worker.FirstName} {w.Worker.LastName}"
+               });
+            ViewData["WorkerId"] = new SelectList(selectList, "WorkerId", "CompoundWorker");
+            //ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address");
             return View();
         }
 

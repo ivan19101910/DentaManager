@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,9 +20,41 @@ namespace WebCoursework.Controllers
         }
 
         // GET: Patients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string firstName, string lastName, DateTime? date, PatientSortState sortOrder = PatientSortState.FirstNameAsc)
         {
-            return View(await _context.Patients.ToListAsync());
+            //return View(await _context.Patients.ToListAsync());
+            var patients = _context.Patients.Select(x => x);
+            //var workers = from m in _context.Workers
+            //             select m;
+            if (!String.IsNullOrEmpty(firstName))
+            {
+                patients = patients.Where(w => w.FirstName == firstName);
+            }
+            if (!String.IsNullOrEmpty(lastName))
+            {
+                patients = patients.Where(w => w.LastName == lastName);
+            }
+            if (date.HasValue)
+            {
+                patients = patients.Where(w => w.DateOfBirth == date);
+            }
+            
+
+            ViewData["FirstNameSort"] = sortOrder == PatientSortState.FirstNameAsc ? PatientSortState.FirstNameDesc : PatientSortState.FirstNameAsc;
+            ViewData["LastNameSort"] = sortOrder == PatientSortState.LastNameAsc ? PatientSortState.LastNameDesc : PatientSortState.LastNameAsc;
+            ViewData["DateSort"] = sortOrder == PatientSortState.DateAsc ? PatientSortState.DateDesc : PatientSortState.DateAsc;
+
+            patients = sortOrder switch
+            {
+                PatientSortState.FirstNameDesc => patients.OrderByDescending(s => s.FirstName),
+                PatientSortState.LastNameAsc => patients.OrderBy(s => s.LastName),
+                PatientSortState.LastNameDesc => patients.OrderByDescending(s => s.LastName),
+                PatientSortState.DateAsc => patients.OrderBy(s => s.DateOfBirth),
+                PatientSortState.DateDesc => patients.OrderByDescending(s => s.DateOfBirth),
+                _ => patients.OrderBy(s => s.FirstName),
+            };
+
+            return View(await patients.ToListAsync());
         }
 
         // GET: Patients/Details/5

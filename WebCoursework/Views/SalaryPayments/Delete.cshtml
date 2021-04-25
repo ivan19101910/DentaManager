@@ -23,19 +23,19 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Year)
         </dd>
-        <dt class = "col-sm-2">
+        @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TransactionNumber)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TransactionNumber)
-        </dd>
+        </dd>*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Amount)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Amount)
         </dd>
-        <dt class = "col-sm-2">
+        @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedDateTime)
         </dt>
         <dd class = "col-sm-10">
@@ -46,13 +46,13 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.LastModifiedDateTime)
-        </dd>
+        </dd>*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Worker)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Worker.Address)
-        </dd class>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Worker.FirstName) @Html.DisplayFor(model => model.Worker.LastName)
+        </dd>
     </dl>
     
     <form asp-action="Delete">

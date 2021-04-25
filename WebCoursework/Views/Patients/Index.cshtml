@@ -9,20 +9,37 @@
 <p>
     <a asp-action="Create">Додати</a>
 </p>
+<form asp-controller="Patients" asp-action="Index">
+    <p>
+        Ім'я: <input type="text" name="firstName" />
+
+        Прізвище: <input type="text" name="lastName" />
+
+        Дата народження: <input type="date" name="date" />
+
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.FirstNameSort">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.LastNameSort">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSort">
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -49,9 +66,9 @@
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PatientId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PatientId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PatientId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PatientId">Редагувати</a> |
+                @*<a asp-action="Details" asp-route-id="@item.PatientId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.PatientId">Видалити</a>
             </td>
         </tr>
 }
