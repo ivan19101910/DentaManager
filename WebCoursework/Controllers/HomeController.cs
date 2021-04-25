@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebCoursework.Models;
@@ -17,10 +18,21 @@ namespace WebCoursework.Controllers
         {
             _logger = logger;
         }
-
+        
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            //return Content(User.Identity.Name);
+            if (User.Identity.IsAuthenticated)
+            {
+                //return Content(User.Identity.Name);
+                return View();
+            }
+            return Content("Не аутентифікований");
         }
 
         public IActionResult Privacy()
