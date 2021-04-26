@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace WebCoursework.Models.SortStates
 {
-    public enum WorkerScheduleSortStatecs
+    public enum WorkerScheduleSortState
     {
         WorkerFirstNameAsc,
         WorkerFirstNameDesc,
         WorkerLastNameAsc,
         WorkerLastNameDesc,
-        WorkerPositionAsc,
-        WorkerPositionDesc,
+        PositionAsc,
+        PositionDesc,
         DayAsc,
         DayDesc,
         StartTimeAsc,

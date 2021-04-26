@@ -6,11 +6,21 @@
 <a href="/Schedules">
     <button>Розклади</button>
 </a>
-<h1>Розклади робітників</h1>
+<h1>Розклади працівників</h1>
 <p>
     <a asp-action="Create">Створити</a>
 </p>
-
+<form asp-controller="WorkerSchedules" asp-action="Index">
+    <p>
+        Прізвище: <input type="text" name="workerLastName" />
+        Ім'я: <input type="text" name="workerFirstName" />
+        Посада: <input type="text" name="position" />
+        День: <input type="text" name="day" />
+        Час початку: <input type="time" name="startTime" />
+        Час кінця: <input type="time" name="endTime" />
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -24,22 +34,34 @@
                 @Html.DisplayNameFor(model => model.Schedule)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Worker.LastName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.WorkerLastNameSort">
+                    @Html.DisplayNameFor(model => model.Worker.LastName)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Worker.FirstName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.WorkerFirstNameSort">
+                    @Html.DisplayNameFor(model => model.Worker.FirstName)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Worker.Position.PositionName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PositionSort">
+                    @Html.DisplayNameFor(model => model.Worker.Position.PositionName)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Schedule.Day.Name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DaySort">
+                    @Html.DisplayNameFor(model => model.Schedule.Day.Name)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Schedule.TimeSegment.TimeStart)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TimeStartSort">
+                    @Html.DisplayNameFor(model => model.Schedule.TimeSegment.TimeStart)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Schedule.TimeSegment.TimeEnd)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TimeEndSort">
+                    @Html.DisplayNameFor(model => model.Schedule.TimeSegment.TimeEnd)
+                </a>
             </th>
             <th></th>
         </tr>

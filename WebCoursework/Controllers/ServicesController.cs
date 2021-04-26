@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,10 +20,40 @@ namespace WebCoursework.Controllers
         }
 
         // GET: Services
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(decimal? price, string service, string serviceType, ServiceSortState sortOrder = ServiceSortState.PriceAsc)
         {
-            var dentalClinicDBContext = _context.Services.Include(s => s.ServiceType);
-            return View(await dentalClinicDBContext.ToListAsync());
+            //var dentalClinicDBContext = _context.Services.Include(s => s.ServiceType);
+            //return View(await dentalClinicDBContext.ToListAsync());
+            var services = _context.Services.Include(st=>st.ServiceType).Select(x => x);
+            //var workers = from m in _context.Workers
+            //             select m;
+            if (price.HasValue)
+            {
+                services = services.Where(w => w.Price == price);
+            }
+            if (!String.IsNullOrEmpty(service))
+            {
+                services = services.Where(w => w.Name == service);
+            }
+            if (!String.IsNullOrEmpty(serviceType))
+            {
+                services = services.Where(w => w.ServiceType.Name == serviceType);
+            }
+
+            ViewData["PriceSort"] = sortOrder == ServiceSortState.PriceAsc ? ServiceSortState.PriceDesc : ServiceSortState.PriceAsc;
+            ViewData["ServiceSort"] = sortOrder == ServiceSortState.ServiceAsc ? ServiceSortState.ServiceDesc : ServiceSortState.ServiceAsc;
+            ViewData["ServiceTypeSort"] = sortOrder == ServiceSortState.ServiceAsc ? ServiceSortState.ServiceTypeDesc : ServiceSortState.ServiceTypeAsc;
+
+            services = sortOrder switch
+            {
+                ServiceSortState.PriceDesc => services.OrderByDescending(s => s.Price),
+                ServiceSortState.ServiceAsc => services.OrderBy(s => s.Name),
+                ServiceSortState.ServiceDesc => services.OrderByDescending(s => s.Name),
+                ServiceSortState.ServiceTypeAsc => services.OrderBy(s => s.ServiceType.Name),
+                ServiceSortState.ServiceTypeDesc => services.OrderByDescending(s => s.ServiceType.Name),
+                _ => services.OrderBy(s => s.Price),
+            };
+            return View(await services.ToListAsync());
         }
 
         // GET: Services/Details/5

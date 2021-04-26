@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,16 +20,67 @@ namespace WebCoursework.Controllers
         }
 
         // GET: WorkerSchedules
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string workerFirstName, string workerLastName, string position, string day, TimeSpan? startTime, TimeSpan? endTime,
+            WorkerScheduleSortState sortOrder = WorkerScheduleSortState.WorkerLastNameAsc)
         {
-            var dentalClinicDBContext = _context.WorkerSchedules
+            var schedules = _context.WorkerSchedules
                 .Include(w => w.Schedule)
                     .ThenInclude(t=>t.TimeSegment)
                 .Include(w => w.Schedule)
                     .ThenInclude(d=>d.Day)
                 .Include(w => w.Worker)
-                    .ThenInclude(p=>p.Position);
-            return View(await dentalClinicDBContext.ToListAsync());
+                    .ThenInclude(p=>p.Position)
+                    .Select(x=>x);
+
+            if (!String.IsNullOrEmpty(workerFirstName))
+            {
+                schedules = schedules.Where(w => w.Worker.FirstName == workerFirstName);
+            }
+            if (!String.IsNullOrEmpty(workerLastName))
+            {
+                schedules = schedules.Where(w => w.Worker.LastName == workerLastName);
+            }
+            if (!String.IsNullOrEmpty(position))
+            {
+                schedules = schedules.Where(w => w.Worker.Position.PositionName == position);
+            }
+            if (!String.IsNullOrEmpty(day))
+            {
+                schedules = schedules.Where(w => w.Schedule.Day.Name == day);
+            }
+            if (startTime.HasValue)
+            {
+                schedules = schedules.Where(w => w.Schedule.TimeSegment.TimeStart == startTime);
+            }
+            if (endTime.HasValue)
+            {
+                schedules = schedules.Where(w => w.Schedule.TimeSegment.TimeEnd == endTime);
+            }
+            ViewData["WorkerFirstNameSort"] = sortOrder == WorkerScheduleSortState.WorkerFirstNameAsc ? WorkerScheduleSortState.WorkerFirstNameDesc : WorkerScheduleSortState.WorkerFirstNameAsc;
+            ViewData["WorkerLastNameSort"] = sortOrder == WorkerScheduleSortState.WorkerLastNameAsc ? WorkerScheduleSortState.WorkerLastNameDesc : WorkerScheduleSortState.WorkerLastNameAsc;
+            ViewData["PositionSort"] = sortOrder == WorkerScheduleSortState.PositionAsc ? WorkerScheduleSortState.PositionDesc : WorkerScheduleSortState.PositionAsc;
+            ViewData["DaySort"] = sortOrder == WorkerScheduleSortState.DayAsc ? WorkerScheduleSortState.DayDesc : WorkerScheduleSortState.DayAsc;
+            ViewData["TimeStartSort"] = sortOrder == WorkerScheduleSortState.StartTimeAsc ? WorkerScheduleSortState.StartTimeDesc : WorkerScheduleSortState.StartTimeAsc;
+            ViewData["TimeEndSort"] = sortOrder == WorkerScheduleSortState.EndTimeAsc ? WorkerScheduleSortState.EndTimeDesc : WorkerScheduleSortState.EndTimeAsc;
+
+            schedules = sortOrder switch
+            {
+                //WorkerScheduleSortState.WorkerFirstNameAsc => schedules.OrderBy(s => s.Worker.FirstName),
+                WorkerScheduleSortState.WorkerLastNameDesc => schedules.OrderByDescending(s => s.Worker.LastName),
+                WorkerScheduleSortState.WorkerFirstNameAsc => schedules.OrderBy(s => s.Worker.FirstName),
+                WorkerScheduleSortState.WorkerFirstNameDesc => schedules.OrderByDescending(s => s.Worker.FirstName),                                            
+                WorkerScheduleSortState.PositionAsc => schedules.OrderBy(s => s.Worker.Position.PositionName),
+                WorkerScheduleSortState.PositionDesc => schedules.OrderByDescending(s => s.Worker.Position.PositionName),
+                WorkerScheduleSortState.DayDesc => schedules.OrderBy(s => s.Schedule.Day.Name),
+                WorkerScheduleSortState.DayAsc => schedules.OrderByDescending(s => s.Schedule.Day.Name),
+                WorkerScheduleSortState.StartTimeAsc => schedules.OrderBy(s => s.Schedule.TimeSegment.TimeStart),
+                WorkerScheduleSortState.StartTimeDesc => schedules.OrderByDescending(s => s.Schedule.TimeSegment.TimeStart),
+                WorkerScheduleSortState.EndTimeAsc => schedules.OrderBy(s => s.Schedule.TimeSegment.TimeEnd),
+                WorkerScheduleSortState.EndTimeDesc => schedules.OrderByDescending(s => s.Schedule.TimeSegment.TimeEnd),
+                _ => schedules.OrderBy(s => s.Worker.LastName),
+            };
+
+            return View(await schedules.ToListAsync());
         }
 
         // GET: WorkerSchedules/Details/5

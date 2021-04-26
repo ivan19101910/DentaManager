@@ -4,24 +4,36 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Послуги</h1>
 <a href="/ServiceTypes">
     <button>Типи послуг</button>
 </a>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Створити</a>
 </p>
+<form asp-controller="Services" asp-action="Index">
+    <p>
+        Ціна: <input type="number" name="price" />
+        Послуга: <input type="text" name="service" />
+        Тип послуги: <input type="text" name="serviceType" />
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSort">
+                    @Html.DisplayNameFor(model => model.Price)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.ServiceSort">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Description)              
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.CreatedDateTime)
@@ -29,9 +41,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.LastModifiedDateTime)
             </th>*@
-            <th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.ServiceTypeSort">
                 @Html.DisplayNameFor(model => model.ServiceType)
-            </th>
+            </a>
+        </th>
             <th></th>
         </tr>
     </thead>
@@ -57,9 +71,9 @@
                 @Html.DisplayFor(modelItem => item.ServiceType.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ServiceId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ServiceId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ServiceId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ServiceId">Редагувати</a> |
+                @*<a asp-action="Details" asp-route-id="@item.ServiceId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.ServiceId">Видалити</a>
             </td>
         </tr>
 }
