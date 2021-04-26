@@ -23,11 +23,10 @@ namespace WebCoursework.Controllers
         public async Task<IActionResult> Index(DateTime? date, TimeSpan? startTime, TimeSpan? endTime, string workerFirstName, string workerLastName, string patientFirstName,
             string patientLastName, string status, AppointmentSortState sortOrder = AppointmentSortState.DateAsc)
         {
-            //var dentalClinicDBContext = _context.Appointments.Include(a => a.Patient).Include(a => a.Status).Include(a => a.Worker);
-            //return View(await dentalClinicDBContext.ToListAsync());
             var appointments = _context.Appointments.Include(a => a.Patient).Include(a => a.Status).Include(a => a.Worker).Select(x=>x);
-            //var workers = from m in _context.Workers
-            //             select m;
+
+            
+
             if (date.HasValue)
             {
                 appointments = appointments.Where(w => w.AppointmentDate == date);
@@ -118,6 +117,8 @@ namespace WebCoursework.Controllers
         // GET: Appointments/Create
         public IActionResult Create()
         {
+            
+
             ViewData["PatientId"] = new SelectList(_context.Patients, "PatientId", "Address");
             ViewData["StatusId"] = new SelectList(_context.AppointmentStatuses, "StatusId", "Name");
             ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address");
@@ -150,7 +151,6 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-
             var appointment = await _context.Appointments.FindAsync(id);
             if (appointment == null)
             {
