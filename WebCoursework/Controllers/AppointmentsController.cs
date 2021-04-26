@@ -30,7 +30,7 @@ namespace WebCoursework.Controllers
             //             select m;
             if (date.HasValue)
             {
-                appointments.Where(w => w.AppointmentDate == date);
+                appointments = appointments.Where(w => w.AppointmentDate == date);
             }
             if (startTime.HasValue)
             {

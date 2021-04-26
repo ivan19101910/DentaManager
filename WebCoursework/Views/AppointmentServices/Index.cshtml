@@ -7,28 +7,49 @@
 <h1>Надані послуги</h1>
 
 <p>
-    <a asp-action="Create">Створити</a>
+    <a asp-action="Create" class="btn btn-outline-success">Додати надані сервіси</a>
 </p>
+<form asp-controller="AppointmentServices" asp-action="Index">
+    <p>
+        Номер прийому: <input type="number" name="id" />
+        Дата: <input type="date" name="date" />
+        Час початку: <input type="time" name="startTime" />
+        Ім'я лікаря: <input type="text" name="workerFirstName" />
+        Прізвище лікаря: <input type="text" name="workerLastName" />
+        Кількість наданої послуги: <input type="number" name="amount" />
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Appointment.AppointmentId)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.IdSort">
+                    @Html.DisplayNameFor(model => model.Appointment.AppointmentId)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Appointment.AppointmentDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSort">
+                    @Html.DisplayNameFor(model => model.Appointment.AppointmentDate)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Appointment.AppointmentTime)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TimeSort">
+                    @Html.DisplayNameFor(model => model.Appointment.AppointmentTime)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Appointment.Worker)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.WorkerNameSort">
+                    @Html.DisplayNameFor(model => model.Appointment.Worker)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Service)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.AmountSort">
+                    @Html.DisplayNameFor(model => model.Amount)
+                </a>
             </th>
             <th></th>
         </tr>

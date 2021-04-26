@@ -7,47 +7,68 @@
 <h1>Платежі</h1>
 
 <p>
-    <a asp-action="Create">Створити</a>
+    <a asp-action="Create" class="btn btn-outline-success">Додати платіж</a>
 </p>
+<form asp-controller="AppointmentPayments" asp-action="Index">
+    <p>
+        Номер прийому: <input type="number" name="id" />
+        Дата: <input type="date" name="date" />
+              <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
+            @*<th>
+            @Html.DisplayNameFor(model => model.TransactionNumber)
+        </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.TransactionNumber)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.IdSort">
+                    @Html.DisplayNameFor(model => model.Appointment.AppointmentId)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Total)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSort">
+                    @Html.DisplayNameFor(model => model.Appointment.AppointmentDate)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TotalSort">
+                    @Html.DisplayNameFor(model => model.Total)
+                </a>
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.CreatedDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastModifiedDateTime)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment)
-            </th>
+            @Html.DisplayNameFor(model => model.CreatedDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastModifiedDateTime)
+        </th>*@
+
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.TransactionNumber)
+        </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.TransactionNumber)
+                @Html.DisplayFor(modelItem => item.Appointment.AppointmentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Appointment.AppointmentDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Total)
             </td>
             @*<td>
-                @Html.DisplayFor(modelItem => item.CreatedDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Appointment.Notes)
-            </td>
+            @Html.DisplayFor(modelItem => item.CreatedDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastModifiedDateTime)
+        </td>*@
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AppointmentPaymentId">Редагувати</a> |
                 @*<a asp-action="Details" asp-route-id="@item.AppointmentPaymentId">Details</a> |*@

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,10 +20,34 @@ namespace WebCoursework.Controllers
         }
 
         // GET: AppointmentPayments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id, DateTime? date, AppointmentPaymentSortState sortOrder = AppointmentPaymentSortState.IdAsc)
         {
-            var dentalClinicDBContext = _context.AppointmentPayments.Include(a => a.Appointment);
-            return View(await dentalClinicDBContext.ToListAsync());
+            var payments = _context.AppointmentPayments.Include(a => a.Appointment).Select(x=>x);
+
+            if (id.HasValue)
+            {
+                payments = payments.Where(w => w.Appointment.AppointmentId == id);
+            }
+            if (date.HasValue)
+            {
+                payments = payments.Where(w => w.Appointment.AppointmentDate == date);
+            }
+
+            ViewData["IdSort"] = sortOrder == AppointmentPaymentSortState.IdAsc ? AppointmentPaymentSortState.IdDesc : AppointmentPaymentSortState.IdAsc;
+            ViewData["DateSort"] = sortOrder == AppointmentPaymentSortState.DateAsc ? AppointmentPaymentSortState.DateDesc : AppointmentPaymentSortState.DateAsc;
+            ViewData["TotalSort"] = sortOrder == AppointmentPaymentSortState.TotalAsc ? AppointmentPaymentSortState.TotalDesc : AppointmentPaymentSortState.TotalAsc;
+
+            payments = sortOrder switch
+            {
+                AppointmentPaymentSortState.IdDesc => payments.OrderByDescending(s => s.AppointmentId),
+                AppointmentPaymentSortState.DateAsc => payments.OrderBy(s => s.Appointment.AppointmentDate),
+                AppointmentPaymentSortState.DateDesc => payments.OrderByDescending(s => s.Appointment.AppointmentDate),
+                AppointmentPaymentSortState.TotalAsc => payments.OrderBy(s => s.Total),
+                AppointmentPaymentSortState.TotalDesc => payments.OrderByDescending(s => s.Total),
+                _ => payments.OrderBy(s => s.AppointmentId),
+            };
+
+            return View(await payments.ToListAsync());
         }
 
         // GET: AppointmentPayments/Details/5
@@ -47,7 +72,7 @@ namespace WebCoursework.Controllers
         // GET: AppointmentPayments/Create
         public IActionResult Create()
         {
-            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes");
+            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId");
             return View();
         }
 
@@ -56,8 +81,22 @@ namespace WebCoursework.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("AppointmentPaymentId,TransactionNumber,AppointmentId,Total,CreatedDateTime,LastModifiedDateTime")] AppointmentPayment appointmentPayment)
+        //{
+            
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(appointmentPayment);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes", appointmentPayment.AppointmentId);
+        //    return View(appointmentPayment);
+        //}
         public async Task<IActionResult> Create([Bind("AppointmentPaymentId,TransactionNumber,AppointmentId,Total,CreatedDateTime,LastModifiedDateTime")] AppointmentPayment appointmentPayment)
         {
+            Random rnd = new Random();
+            appointmentPayment.TransactionNumber = rnd.Next(1, 100);
             if (ModelState.IsValid)
             {
                 _context.Add(appointmentPayment);
@@ -81,7 +120,7 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes", appointmentPayment.AppointmentId);
+            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId", appointmentPayment.AppointmentId);
             return View(appointmentPayment);
         }
 

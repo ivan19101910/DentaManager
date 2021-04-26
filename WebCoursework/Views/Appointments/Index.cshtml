@@ -7,16 +7,16 @@
 <h1>Прийоми</h1>
 
 <p>
-    <a asp-action="Create">Створити</a>
+    <a asp-action="Create" class="btn btn-outline-success">Додати прийом</a>
 </p>
-<a href="/AppointmentStatus">
-    <button>Статуси прийому</button>
+<a class="btn btn-primary" href="/AppointmentStatus">
+    Статуси прийому
 </a>
-<a href="/AppointmentServices">
-    <button>Послуги</button>
+<a class="btn btn-primary" href="/AppointmentServices">
+    Послуги
 </a>
-<a href="/AppointmentPayments">
-    <button>Платежі</button>
+<a class="btn btn-primary" href="/AppointmentPayments">
+    Платежі
 </a>
 <form asp-controller="Appointments" asp-action="Index">
     <p>

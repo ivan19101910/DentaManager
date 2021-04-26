@@ -8,15 +8,15 @@
 
 <h3>Ви впевнені, що хочете видалити це?</h3>
 <div>
-    <h4>AppointmentPayment</h4>
+    <h4>Платіж</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TransactionNumber)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TransactionNumber)
-        </dd>
+        </dd>*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Total)
         </dt>
@@ -24,28 +24,16 @@
             @Html.DisplayFor(model => model.Total)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDateTime)
+            @Html.DisplayNameFor(model => model.Appointment.AppointmentId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDateTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastModifiedDateTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastModifiedDateTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.Notes)
+            @Html.DisplayFor(model => model.Appointment.AppointmentId)
         </dd class>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="AppointmentPaymentId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Видалити" class="btn btn-danger" /> |
+        <a asp-action="Index">Повернутися до списку</a>
     </form>
 </div>

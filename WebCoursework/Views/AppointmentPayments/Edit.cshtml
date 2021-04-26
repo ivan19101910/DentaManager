@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AppointmentPaymentId" />
             <div class="form-group">
-                <label asp-for="TransactionNumber" class="control-label"></label>
+                @*<label asp-for="TransactionNumber" class="control-label"></label>*@
                 <input asp-for="TransactionNumber" class="form-control" />
                 <span asp-validation-for="TransactionNumber" class="text-danger"></span>
             </div>

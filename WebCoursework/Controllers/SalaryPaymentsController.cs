@@ -113,8 +113,10 @@ namespace WebCoursework.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SalaryPaymentId,MonthNumber,Year,TransactionNumber,Amount,WorkerId,CreatedDateTime,LastModifiedDateTime")] SalaryPayment salaryPayment)
+        public async Task<IActionResult> Create([Bind("SalaryPaymentId,MonthNumber,Year,Amount,WorkerId,CreatedDateTime,LastModifiedDateTime")] SalaryPayment salaryPayment)
         {
+            Random rnd = new Random();
+            salaryPayment.TransactionNumber = rnd.Next(1, 100);
             if (ModelState.IsValid)
             {
                 _context.Add(salaryPayment);

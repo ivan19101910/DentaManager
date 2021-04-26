@@ -5,14 +5,14 @@
 }
 
 <h1>Працівники</h1>
-<a href="/Positions">
-    <button>Посади</button>
+<a class="btn btn-primary" href="/Positions">
+    Посади
 </a>
-<a href="/SalaryPayments">
-    <button>Зарплати</button>
+<a class="btn btn-primary" href="/SalaryPayments">
+    Зарплати
 </a>
 <p>
-    <a asp-action="Create">Додати</a>
+    <a asp-action="Create" class="btn btn-outline-success">Додати працівника</a>
     <form asp-controller="Workers" asp-action="Index">
 <p>
     Ім'я: <input type="text" name="firstName" />

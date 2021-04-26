@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,14 +20,59 @@ namespace WebCoursework.Controllers
         }
 
         // GET: AppointmentServices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id, DateTime? date, TimeSpan? timeStart, string workerFirstName, string workerLastName
+            ,AppointmentServiceSortState sortOrder = AppointmentServiceSortState.DateAsc)
         {
-            var dentalClinicDBContext = 
+            var services = 
                 _context.AppointmentServices
                 .Include(a => a.Appointment)
                 .ThenInclude(w=>w.Worker)
-                .Include(a => a.Service);
-            return View(await dentalClinicDBContext.ToListAsync());
+                .Include(a => a.Service)
+                .Select(x=>x);
+
+            if (id.HasValue)
+            {
+                services = services.Where(w => w.Appointment.AppointmentId == id);
+            }
+            if (date.HasValue)
+            {
+                services = services.Where(w => w.Appointment.AppointmentDate == date);
+            }
+            if (timeStart.HasValue)
+            {
+                services =  services.Where(w => w.Appointment.AppointmentTime == timeStart);
+            }
+            if (!String.IsNullOrEmpty(workerFirstName))
+            {
+                services = services.Where(w => w.Appointment.Worker.FirstName == workerFirstName);
+            }
+            if (!String.IsNullOrEmpty(workerLastName))
+            {
+                services = services.Where(w => w.Appointment.Worker.LastName == workerLastName);
+            }
+
+            ViewData["IdSort"] = sortOrder == AppointmentServiceSortState.IdAsc ? AppointmentServiceSortState.IdDesc : AppointmentServiceSortState.IdAsc;
+            ViewData["DateSort"] = sortOrder == AppointmentServiceSortState.DateAsc ? AppointmentServiceSortState.DateDesc : AppointmentServiceSortState.DateAsc;
+            ViewData["TimeStartSort"] = sortOrder == AppointmentServiceSortState.StartTimeAsc ? AppointmentServiceSortState.StartTimeDesc : AppointmentServiceSortState.StartTimeAsc;
+            ViewData["WorkerNameSort"] = sortOrder == AppointmentServiceSortState.WorkerNameAsc ? AppointmentServiceSortState.WorkerNameDesc : AppointmentServiceSortState.WorkerNameAsc;
+            
+            ViewData["AmountSort"] = sortOrder == AppointmentServiceSortState.AmountAsc ? AppointmentServiceSortState.AmountDesc : AppointmentServiceSortState.AmountAsc;
+
+            services = sortOrder switch
+            {
+                AppointmentServiceSortState.IdDesc => services.OrderByDescending(s => s.AppointmentId),
+                AppointmentServiceSortState.DateAsc => services.OrderBy(s => s.Appointment.AppointmentDate),
+                AppointmentServiceSortState.DateDesc => services.OrderByDescending(s => s.Appointment.AppointmentDate),
+                AppointmentServiceSortState.StartTimeAsc => services.OrderBy(s => s.Appointment.AppointmentTime),
+                AppointmentServiceSortState.StartTimeDesc => services.OrderByDescending(s => s.Appointment.AppointmentTime),
+                AppointmentServiceSortState.WorkerNameAsc => services.OrderBy(s => s.Appointment.Worker.FirstName).ThenBy(s => s.Appointment.Worker.LastName),
+                AppointmentServiceSortState.WorkerNameDesc => services.OrderByDescending(s => s.Appointment.Worker.FirstName).ThenBy(s => s.Appointment.Worker.LastName),
+                AppointmentServiceSortState.AmountAsc => services.OrderBy(s => s.Amount),
+                AppointmentServiceSortState.AmountDesc => services.OrderByDescending(s => s.Amount),
+                _ => services.OrderBy(s => s.AppointmentId),
+            };
+
+            return View(await services.ToListAsync());
         }
 
         // GET: AppointmentServices/Details/5
@@ -89,8 +135,9 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes", appointmentService.AppointmentId);
-            ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "Description", appointmentService.ServiceId);
+            //ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes", appointmentService.AppointmentId);
+            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId", appointmentService.AppointmentId);
+            ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "Name", appointmentService.ServiceId);
             return View(appointmentService);
         }
 

@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Index";
 }
-<a href="/Schedules">
-    <button>Розклади</button>
+<a class="btn btn-primary" href="/Schedules">
+    Розклади
 </a>
 <h1>Розклади працівників</h1>
 <p>
-    <a asp-action="Create">Створити</a>
+    <a asp-action="Create" class="btn btn-outline-success">Додати розклад робітника</a>
 </p>
 <form asp-controller="WorkerSchedules" asp-action="Index">
     <p>
