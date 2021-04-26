@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,10 +20,78 @@ namespace WebCoursework.Controllers
         }
 
         // GET: Appointments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? date, TimeSpan? startTime, TimeSpan? endTime, string workerFirstName, string workerLastName, string patientFirstName,
+            string patientLastName, string status, AppointmentSortState sortOrder = AppointmentSortState.DateAsc)
         {
-            var dentalClinicDBContext = _context.Appointments.Include(a => a.Patient).Include(a => a.Status).Include(a => a.Worker);
-            return View(await dentalClinicDBContext.ToListAsync());
+            //var dentalClinicDBContext = _context.Appointments.Include(a => a.Patient).Include(a => a.Status).Include(a => a.Worker);
+            //return View(await dentalClinicDBContext.ToListAsync());
+            var appointments = _context.Appointments.Include(a => a.Patient).Include(a => a.Status).Include(a => a.Worker).Select(x=>x);
+            //var workers = from m in _context.Workers
+            //             select m;
+            if (date.HasValue)
+            {
+                appointments.Where(w => w.AppointmentDate == date);
+            }
+            if (startTime.HasValue)
+            {
+                appointments = appointments.Where(w => w.AppointmentTime == startTime);
+            }
+            if (endTime.HasValue)
+            {
+                appointments = appointments.Where(w => w.RealEndTime == endTime);
+            }
+            if (!String.IsNullOrEmpty(workerFirstName))
+            {
+                appointments = appointments.Where(w => w.Worker.FirstName == workerFirstName);
+            }
+            if (!String.IsNullOrEmpty(workerLastName))
+            {
+                appointments = appointments.Where(w => w.Worker.LastName == workerLastName);
+            }
+            if (!String.IsNullOrEmpty(patientFirstName))
+            {
+                appointments = appointments.Where(w => w.Patient.FirstName == patientFirstName);
+            }
+            if (!String.IsNullOrEmpty(patientLastName))
+            {
+                appointments = appointments.Where(w => w.Patient.LastName == patientLastName);
+            }
+            if (!String.IsNullOrEmpty(status))
+            {
+                appointments = appointments.Where(w => w.Status.Name == status);
+            }
+
+
+            ViewData["DateSort"] = sortOrder == AppointmentSortState.DateAsc ? AppointmentSortState.DateDesc : AppointmentSortState.DateAsc;
+            ViewData["TimeStartSort"] = sortOrder == AppointmentSortState.StartTimeAsc ? AppointmentSortState.StartTimeDesc : AppointmentSortState.StartTimeAsc;
+            ViewData["TimeEndSort"] = sortOrder == AppointmentSortState.EndTimeAsc ? AppointmentSortState.EndTimeDesc : AppointmentSortState.EndTimeAsc;
+            ViewData["WorkerFirstNameSort"] = sortOrder == AppointmentSortState.WorkerFirstNameAsc ? AppointmentSortState.WorkerFirstNameDesc : AppointmentSortState.WorkerFirstNameAsc;
+            ViewData["WorkerLastNameSort"] = sortOrder == AppointmentSortState.WorkerLastNameAsc ? AppointmentSortState.WorkerLastNameDesc : AppointmentSortState.WorkerLastNameAsc;
+            ViewData["PatientFirstNameSort"] = sortOrder == AppointmentSortState.PatientFirstNameAsc ? AppointmentSortState.PatientFirstNameDesc : AppointmentSortState.PatientFirstNameAsc;
+            ViewData["PatientLastNameSort"] = sortOrder == AppointmentSortState.PatientLastNameAsc ? AppointmentSortState.PatientLastNameDesc : AppointmentSortState.PatientLastNameAsc;
+            ViewData["StatusSort"] = sortOrder == AppointmentSortState.StatusAsc ? AppointmentSortState.StatusDesc : AppointmentSortState.StatusAsc;
+
+            appointments = sortOrder switch
+            {
+                AppointmentSortState.DateDesc => appointments.OrderByDescending(s => s.AppointmentDate),
+                AppointmentSortState.StartTimeAsc => appointments.OrderBy(s => s.AppointmentTime),
+                AppointmentSortState.StartTimeDesc => appointments.OrderByDescending(s => s.AppointmentTime),
+                AppointmentSortState.EndTimeAsc => appointments.OrderBy(s => s.RealEndTime),
+                AppointmentSortState.EndTimeDesc => appointments.OrderByDescending(s => s.RealEndTime),
+                AppointmentSortState.WorkerFirstNameAsc => appointments.OrderBy(s => s.Worker.FirstName),
+                AppointmentSortState.WorkerFirstNameDesc => appointments.OrderByDescending(s => s.Worker.FirstName),
+                AppointmentSortState.WorkerLastNameAsc => appointments.OrderBy(s => s.Worker.LastName),
+                AppointmentSortState.WorkerLastNameDesc => appointments.OrderByDescending(s => s.Worker.LastName),
+                AppointmentSortState.PatientFirstNameAsc => appointments.OrderBy(s => s.Patient.FirstName),
+                AppointmentSortState.PatientFirstNameDesc => appointments.OrderByDescending(s => s.Patient.FirstName),
+                AppointmentSortState.PatientLastNameAsc => appointments.OrderBy(s => s.Patient.LastName),
+                AppointmentSortState.PatientLastNameDesc => appointments.OrderByDescending(s => s.Patient.LastName),
+                AppointmentSortState.StatusAsc => appointments.OrderBy(s => s.Status.Name),
+                AppointmentSortState.StatusDesc => appointments.OrderByDescending(s => s.Status.Name),
+                _ => appointments.OrderBy(s => s.AppointmentDate),
+            };
+
+            return View(await appointments.ToListAsync());
         }
 
         // GET: Appointments/Details/5

@@ -25,7 +25,7 @@ namespace WebCoursework
         [HiddenInput]
         [ReadOnly(true)]
         public DateTime LastModifiedDateTime { get; set; }
-
+        [DisplayName("Місто")]
         public virtual City City { get; set; }
         public virtual ICollection<Worker> Workers { get; set; }
     }

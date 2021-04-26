@@ -4,32 +4,64 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Прийоми</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Створити</a>
 </p>
+<a href="/AppointmentStatus">
+    <button>Статуси прийому</button>
+</a>
+<a href="/AppointmentServices">
+    <button>Послуги</button>
+</a>
+<a href="/AppointmentPayments">
+    <button>Платежі</button>
+</a>
+<form asp-controller="Appointments" asp-action="Index">
+    <p>
+        Дата: <input type="date" name="date" />
+        Час початку: <input type="time" name="startTime" />
+        Час кінця: <input type="time" name="endTime" />
+        Ім'я лікаря: <input type="text" name="workerFirstName" />
+        Прізвище лікаря: <input type="text" name="workerLastName" />
+        Ім'я пацієнта: <input type="text" name="patientFirstName" />
+        Прізвище пацієнта: <input type="text" name="patientLastName" />
+        Статус: <input type="text" name="status" />
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AppointmentDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSort">
+                    @Html.DisplayNameFor(model => model.AppointmentDate)
+                </a>
             </th>
             @*<th>
             @Html.DisplayNameFor(model => model.Notes)
         </th>*@
             <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TimeStartSort">
                 @Html.DisplayNameFor(model => model.AppointmentTime)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RealEndTime)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TimeEndSort">
+                    @Html.DisplayNameFor(model => model.RealEndTime)
+                </a>
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Worker.FirstName) лікаря
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.WorkerFirstNameSort">
+                    @Html.DisplayNameFor(model => model.Worker.FirstName) лікаря
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Worker.LastName) лікаря
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.WorkerLastNameSort">
+                    @Html.DisplayNameFor(model => model.Worker.LastName) лікаря
+                </a>
             </th>
             @*<th>
             @Html.DisplayNameFor(model => model.CreatedDateTime)
@@ -41,13 +73,19 @@
             @Html.DisplayNameFor(model => model.TotalSum)
         </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Patient.FirstName) пацієнта
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PatientFirstNameSort">
+                    @Html.DisplayNameFor(model => model.Patient.FirstName) пацієнта
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Patient.LastName) пацієнта
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PatientFirstNameSort">
+                    @Html.DisplayNameFor(model => model.Patient.LastName) пацієнта
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.StatusSort">
+                    @Html.DisplayNameFor(model => model.Status)
+                </a>
             </th>
 
             <th></th>
@@ -94,9 +132,9 @@
             </td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AppointmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AppointmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AppointmentId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.AppointmentId">Редагувати</a> |
+                @*<a asp-action="Details" asp-route-id="@item.AppointmentId">Деталі</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.AppointmentId">Видалити</a>
             </td>
         </tr>
 }
