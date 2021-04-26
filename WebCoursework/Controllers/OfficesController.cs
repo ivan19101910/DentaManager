@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,10 +20,33 @@ namespace WebCoursework.Controllers
         }
 
         // GET: Offices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string address, string city, OfficeSortState sortOrder = OfficeSortState.AddressAsc)
         {
-            var dentalClinicDBContext = _context.Offices.Include(o => o.City);
-            return View(await dentalClinicDBContext.ToListAsync());
+            //var dentalClinicDBContext = _context.Offices.Include(o => o.City);
+
+            var offices = _context.Offices.Include(o => o.City).Select(x => x);
+
+            if (!String.IsNullOrEmpty(address))
+            {
+                offices = offices.Where(w => w.Address == address);
+            }
+            if (!String.IsNullOrEmpty(city))
+            {
+                offices = offices.Where(w => w.City.Name == city);
+            }
+
+            ViewData["AddressSort"] = sortOrder == OfficeSortState.AddressAsc ? OfficeSortState.AddressDesc : OfficeSortState.AddressAsc;
+            ViewData["CitySort"] = sortOrder == OfficeSortState.CityAsc ? OfficeSortState.CityDesc : OfficeSortState.CityAsc;
+
+            offices = sortOrder switch
+            {
+                OfficeSortState.AddressDesc => offices.OrderByDescending(s => s.Address),
+                OfficeSortState.CityAsc => offices.OrderBy(s => s.City.Name),
+                OfficeSortState.CityDesc => offices.OrderByDescending(s => s.City.Name),
+                _ => offices.OrderBy(s => s.Address),
+            };
+
+            return View(await offices.ToListAsync());
         }
 
         // GET: Offices/Details/5

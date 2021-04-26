@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebCoursework.Models.SortStates
 {
-    public class CitySortState
+    public enum CitySortState
     {
+        NameAsc,
+        NameDesc
     }
 }

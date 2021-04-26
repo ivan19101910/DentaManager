@@ -52,8 +52,8 @@ namespace WebCoursework.Controllers
         // GET: AppointmentServices/Create
         public IActionResult Create()
         {
-            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes");
-            ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "Description");
+            ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "AppointmentId");
+            ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "Name");
             return View();
         }
 
@@ -70,6 +70,7 @@ namespace WebCoursework.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            //ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes", appointmentService.AppointmentId);
             ViewData["AppointmentId"] = new SelectList(_context.Appointments, "AppointmentId", "Notes", appointmentService.AppointmentId);
             ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "Description", appointmentService.ServiceId);
             return View(appointmentService);

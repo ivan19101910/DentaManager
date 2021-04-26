@@ -35,6 +35,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.AppointmentId)
+            </th>
+            <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSort">
                     @Html.DisplayNameFor(model => model.AppointmentDate)
                 </a>
@@ -44,7 +47,7 @@
         </th>*@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewBag.TimeStartSort">
-                @Html.DisplayNameFor(model => model.AppointmentTime)
+                    @Html.DisplayNameFor(model => model.AppointmentTime)
                 </a>
             </th>
             <th>
@@ -94,6 +97,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AppointmentId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AppointmentDate)
             </td>

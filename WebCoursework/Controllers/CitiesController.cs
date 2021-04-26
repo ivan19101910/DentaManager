@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebCoursework;
+using WebCoursework.Models.SortStates;
 
 namespace WebCoursework.Controllers
 {
@@ -19,9 +20,23 @@ namespace WebCoursework.Controllers
         }
 
         // GET: Cities
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string city, CitySortState sortOrder = CitySortState.NameAsc)
         {
-            return View(await _context.Cities.ToListAsync());
+            var offices = _context.Cities.Select(x => x);
+
+            if (!String.IsNullOrEmpty(city))
+            {
+                offices = offices.Where(w => w.Name == city);
+            }
+
+            ViewData["NameSort"] = sortOrder == CitySortState.NameAsc ? CitySortState.NameDesc : CitySortState.NameAsc;
+
+            offices = sortOrder switch
+            {
+                CitySortState.NameDesc => offices.OrderByDescending(s => s.Name),
+                _ => offices.OrderBy(s => s.Name),
+            };
+            return View(await offices.ToListAsync());
         }
 
         // GET: Cities/Details/5

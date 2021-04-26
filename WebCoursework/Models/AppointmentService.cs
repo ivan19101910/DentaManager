@@ -10,7 +10,9 @@ namespace WebCoursework
     public partial class AppointmentService
     {
         public int Id { get; set; }
+        [DisplayName("Послуга")]
         public int ServiceId { get; set; }
+        [DisplayName("Номер прийому")]
         public int AppointmentId { get; set; }
         [DisplayName("Кількість наданої послуги")]
         public int Amount { get; set; }

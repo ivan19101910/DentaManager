@@ -9,11 +9,19 @@
 <p>
     <a asp-action="Create">Створити нове</a>
 </p>
+<form asp-controller="Cities" asp-action="Index">
+    <p>
+        Місто: <input type="text" name="city" />
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.CreatedDateTime)

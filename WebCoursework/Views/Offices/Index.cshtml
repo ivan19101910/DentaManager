@@ -12,11 +12,22 @@
 <a href="/Cities">
     <button>Міста</button>
 </a>
+<form asp-controller="Offices" asp-action="Index">
+    <p>
+        Адреса: <input type="text" name="address" />
+
+        Місто: <input type="text" name="city" />
+
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.AddressSort">
+                    @Html.DisplayNameFor(model => model.Address)
+                </a>
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.CreatedDateTime)
@@ -25,7 +36,9 @@
                 @Html.DisplayNameFor(model => model.LastModifiedDateTime)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.CitySort">
+                    @Html.DisplayNameFor(model => model.City)
+                </a>
             </th>
             <th></th>
         </tr>
