@@ -3,22 +3,29 @@
 @{
     ViewData["Title"] = "Index";
 }
-<a class="btn btn-primary" href="/Schedules">
-    Розклади
-</a>
+
 <h1>Розклади працівників</h1>
 <p>
     <a asp-action="Create" class="btn btn-outline-success">Додати розклад робітника</a>
 </p>
+<p>
+    <a class="btn btn-primary" href="/Schedules">
+        Розклади
+    </a>
+</p>
 <form asp-controller="WorkerSchedules" asp-action="Index">
+    <p>
     <p>
         Прізвище: <input type="text" name="workerLastName" />
         Ім'я: <input type="text" name="workerFirstName" />
         Посада: <input type="text" name="position" />
+    </p>
+    <p>
         День: <input type="text" name="day" />
         Час початку: <input type="time" name="startTime" />
         Час кінця: <input type="time" name="endTime" />
         <input type="submit" value="Пошук" />
+    </p>
     </p>
 </form>
 <table class="table">

@@ -97,6 +97,8 @@ namespace WebCoursework.Controllers
         // GET: SalaryPayments/Create
         public IActionResult Create()
         {
+            //var f = _context.Database.ExecuteSqlInterpolated($"USE DentalClinicDB SELECT dbo.CountPayment(1, 1, 1)");
+
             var selectList = _context.SalaryPayments
                .Select(w => new
                {
@@ -115,6 +117,9 @@ namespace WebCoursework.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SalaryPaymentId,MonthNumber,Year,Amount,WorkerId,CreatedDateTime,LastModifiedDateTime")] SalaryPayment salaryPayment)
         {
+           
+
+
             Random rnd = new Random();
             salaryPayment.TransactionNumber = rnd.Next(1, 100);
             if (ModelState.IsValid)

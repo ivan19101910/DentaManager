@@ -5,12 +5,15 @@
 }
 
 <h1>Послуги</h1>
-<a class="btn btn-primary" href="/ServiceTypes">
-    Типи послуг
-</a>
 <p>
     <a asp-action="Create" class="btn btn-outline-success">Додати послугу</a>
 </p>
+<p>
+    <a class="btn btn-primary" href="/ServiceTypes">
+        Типи послуг
+    </a>
+</p>
+
 <form asp-controller="Services" asp-action="Index">
     <p>
         Ціна: <input type="number" name="price" />

@@ -7,17 +7,21 @@
 <h1>Надані послуги</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-outline-success">Додати надані сервіси</a>
+    <a asp-action="Create" class="btn btn-outline-success">Додати надану послугу</a>
 </p>
 <form asp-controller="AppointmentServices" asp-action="Index">
     <p>
+        <p>
         Номер прийому: <input type="number" name="id" />
         Дата: <input type="date" name="date" />
         Час початку: <input type="time" name="startTime" />
+        </p>
+    <p>
         Ім'я лікаря: <input type="text" name="workerFirstName" />
         Прізвище лікаря: <input type="text" name="workerLastName" />
         Кількість наданої послуги: <input type="number" name="amount" />
         <input type="submit" value="Пошук" />
+    </p>
     </p>
 </form>
 <table class="table">

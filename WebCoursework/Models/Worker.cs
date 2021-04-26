@@ -30,11 +30,11 @@ namespace WebCoursework
         [DisplayName("Номер телефону")]
         public string PhoneNumber { get; set; }
         [DisplayName("Email")]
-        [Required(ErrorMessage = "Не указан Email")]
+        [Required(ErrorMessage = "Не вказаний Email")]
         public string Email { get; set; }
 
         [DisplayName("Пароль")]
-        [Required(ErrorMessage = "Не указан password")]
+        [Required(ErrorMessage = "Не вказаний пароль")]
         public string Password { get; set; }
         [DisplayName("Адреса")]
         public string Address { get; set; }

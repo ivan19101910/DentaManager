@@ -114,8 +114,18 @@ namespace WebCoursework.Controllers
             {
                 return NotFound();
             }
-
+            
             var appointmentPayment = await _context.AppointmentPayments.FindAsync(id);
+            //var f = _context.AppointmentPayments
+            //    .Include(a => a.Appointment)
+            //    .ThenInclude(a=>a.AppointmentServices)
+            //    .ThenInclude(s=>s.Service);
+            //double sum = 0;
+            //foreach(var w in f)
+            //{
+            //    sum += w.Appointment.AppointmentServices.Count * w.Appointment.AppointmentServices.Service
+            //}
+
             if (appointmentPayment == null)
             {
                 return NotFound();
