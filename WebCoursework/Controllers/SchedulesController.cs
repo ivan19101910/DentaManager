@@ -48,8 +48,17 @@ namespace WebCoursework.Controllers
         // GET: Schedules/Create
         public IActionResult Create()
         {
+            var selectList = _context.Schedules
+                .Include(t=>t.TimeSegment)
+               .Select(s => new
+               {
+                   s.TimeSegmentId,
+                   CompoundTime = $"{s.TimeSegment.TimeStart} - {s.TimeSegment.TimeEnd}"
+               });
+            ViewData["TimeSegmentId"] = new SelectList(selectList, "TimeSegmentId", "CompoundTime");
+
             ViewData["DayId"] = new SelectList(_context.Days, "DayId", "Name");
-            ViewData["TimeSegmentId"] = new SelectList(_context.TimeSegments, "TimeSegmentId", "TimeSegmentId");
+            //ViewData["TimeSegmentId"] = new SelectList(_context.TimeSegments, "TimeSegmentId", "TimeSegmentId");
             return View();
         }
 

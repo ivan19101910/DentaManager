@@ -17,6 +17,7 @@ namespace WebCoursework
 
         public int TimeSegmentId { get; set; }
         [DisplayName("Час початку")]
+        [DataType(DataType.Time)]
         public TimeSpan TimeStart { get; set; }
         [DisplayName("Час кінця")]
         [DataType(DataType.Time)]

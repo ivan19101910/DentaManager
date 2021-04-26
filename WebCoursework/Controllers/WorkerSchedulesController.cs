@@ -54,8 +54,24 @@ namespace WebCoursework.Controllers
         // GET: WorkerSchedules/Create
         public IActionResult Create()
         {
-            ViewData["ScheduleId"] = new SelectList(_context.Schedules, "ScheduleId", "ScheduleId");
-            ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address");
+            ViewData["ScheduleId"] = new SelectList(
+                 _context.Schedules
+                 .Include(t => t.TimeSegment)
+                 .Include(d => d.Day)
+                .Select(t => new
+                {
+                    t.ScheduleId,
+                    CompoundSchedule = $"{t.Day.Name} {t.TimeSegment.TimeStart} - {t.TimeSegment.TimeEnd}"
+                }), "ScheduleId", "CompoundSchedule");
+
+            //ViewData["ScheduleId"] = new SelectList(_context.Schedules, "ScheduleId", "ScheduleId");
+            ViewData["WorkerId"] = new SelectList(
+                _context.Workers
+                .Select(w=>new 
+                {
+                    w.WorkerId,
+                    CompoundWorker = $"{w.FirstName} {w.LastName}"
+                }), "WorkerId", "CompoundWorker");
             return View();
         }
 
@@ -104,7 +120,14 @@ namespace WebCoursework.Controllers
 
             //ViewData["ScheduleId"] = new SelectList(_context.Schedules, "ScheduleId", "ScheduleId", workerSchedule.ScheduleId);
             ViewData["ScheduleId"] = new SelectList(selectList, "ScheduleId", "CompoundSchedule", workerSchedule.ScheduleId);
-            ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", workerSchedule.WorkerId);
+            //ViewData["WorkerId"] = new SelectList(_context.Workers, "WorkerId", "Address", workerSchedule.WorkerId);
+            ViewData["WorkerId"] = new SelectList(
+                _context.Workers
+                .Select(w => new
+                {
+                    w.WorkerId,
+                    CompoundWorker = $"{w.FirstName} {w.LastName}"
+                }), "WorkerId", "CompoundWorker");
             return View(workerSchedule);
         }
 
@@ -155,6 +178,9 @@ namespace WebCoursework.Controllers
 
             var workerSchedule = await _context.WorkerSchedules
                 .Include(w => w.Schedule)
+                    .ThenInclude(d=>d.Day)
+                .Include(w => w.Schedule)
+                    .ThenInclude(t=>t.TimeSegment)
                 .Include(w => w.Worker)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (workerSchedule == null)
